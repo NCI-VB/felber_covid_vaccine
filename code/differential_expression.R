@@ -1,8 +1,8 @@
 
-suppressMessages(library(limma))
-suppressMessages(library(tidyverse))
-suppressMessages(library(edgeR))
-suppressMessages(library(stringr))
+suppressMessages(library(limma)) #3.38.3
+suppressMessages(library(tidyverse)) #1.3.0
+suppressMessages(library(edgeR)) #3.24.3
+suppressMessages(library(stringr)) #1.4.0
 
 voom_msd <- function (counts, design = NULL, ...) 
 {
@@ -25,9 +25,9 @@ voom_msd <- function (counts, design = NULL, ...)
   new("EList", out)
 }
 
-df <- naive_dataset
+df <- read.csv("../results/naive_dataset.csv", header = TRUE)
 genenames <- df[["Gene"]]
-if(make.names(colnames(df))!=colnames(df)){
+if(any(make.names(colnames(df))!=colnames(df))){
   print("Error: The following counts matrix column names are not valid:\n")
   print(colnames(df)[make.names(colnames(df))!=colnames(df)])
   
@@ -37,15 +37,10 @@ if(make.names(colnames(df))!=colnames(df)){
 
 samples_for_deg_analysis = colnames(df)
 samples_for_deg_analysis <- samples_for_deg_analysis[samples_for_deg_analysis != "Gene"]
-samples_for_deg_analysis <- samples_for_deg_analysis[samples_for_deg_analysis != "GeneName"]
 
 df.m <- df[,samples_for_deg_analysis]
 
-
-gene_names <- NULL
-gene_names$GeneID <- df[,1]
-
-targetfile <- metadata
+targetfile <- read.csv("../data/metadata.csv", header=TRUE)
 targetfile <- targetfile[match(colnames(df.m),targetfile$sample_id),]
 targetfile <- targetfile[rowSums(is.na(targetfile)) != ncol(targetfile), ]
 df.m <- df.m[,match(targetfile$sample_id,colnames(df.m))]
@@ -56,7 +51,6 @@ ordered_covariates=c("timepoint","patient_id")
 
 ordered_covariates=ordered_covariates[order(ordered_covariates!="timepoint")]
 
-print(tail(targetfile))
 targetfile <- targetfile %>% select(sample_id,one_of(ordered_covariates)) %>% as.data.frame()
 
 row.names(targetfile) <- targetfile$sample_id
@@ -77,8 +71,6 @@ contrasts_of_interest <- c( "d2-d1",
                             "d8-d1",
                             "(d23-d22)-(d2-d1)")
 
-print(unique(targetfile$patient_id))
-print(unique(targetfile$timepoint))
 cm <- makeContrasts(contrasts = contrasts_of_interest, levels=design)
 
 fit2 <- contrasts.fit(fit, cm)
@@ -105,5 +97,4 @@ print(paste0("Total number of genes included: ", nrow(finalres)))
 
 call_me_alias<-colnames(finalres)
 colnames(finalres)<-gsub("\\(|\\)","",call_me_alias)
-sparkdffr<-createDataFrame(finalres)
-return(sparkdffr) 
+write.csv(finalres,file="../results/naive_deg_analysis.csv",row.names = FALSE, quote = FALSE)
