@@ -67,7 +67,6 @@ fit <- lmFit(v, design)
 
 contrasts_of_interest <- c( "d2-d1",
                             "d23-d22",
-                            "d22-d1",
                             "d8-d1",
                             "(d23-d22)-(d2-d1)")
 
@@ -79,18 +78,18 @@ fit2 <- eBayes(fit2)
 
 
 logFC = fit2$coefficients
-colnames(logFC)=paste(colnames(logFC),"logFC",sep="_")
+colnames(logFC)=paste(gsub("-","_",colnames(logFC)),"logFC",sep="_")
 tstat = fit2$t
-colnames(tstat)=paste(colnames(tstat),"tstat",sep="_")
+colnames(tstat)=paste(gsub("-","_",colnames(tstat)),"tstat",sep="_")
 FC = 2^fit2$coefficients
 FC = ifelse(FC<1,-1/FC,FC)
-colnames(FC)=paste(colnames(FC),"FC",sep="_")
+colnames(FC)=paste(gsub("-","_",colnames(FC)),"FC",sep="_")
 pvalall=fit2$p.value
-colnames(pvalall)=paste(colnames(pvalall),"pval",sep="_")
+colnames(pvalall)=paste(gsub("-","_",colnames(pvalall)),"pval",sep="_")
 pvaladjall=apply(pvalall,2,function(x) p.adjust(x,"BH"))
-colnames(pvaladjall)=paste(colnames(fit2$coefficients),"adjpval",sep="_")
+colnames(pvaladjall)=paste(gsub("-","_",colnames(fit2$coefficients)),"adjpval",sep="_")
 
-finalres=as.data.frame(cbind(v$E,FC, logFC, tstat, pvalall, pvaladjall))
+finalres=as.data.frame(cbind(FC, logFC, tstat, pvalall, pvaladjall))
 
 finalres %>% rownames_to_column("Gene") -> finalres
 print(paste0("Total number of genes included: ", nrow(finalres)))
