@@ -1,4 +1,5 @@
 suppressMessages(library(tidyverse)) #1.3.0
+suppressMessages(library(stringr)) #1.4.0
 
 setwd("/Users/angelmg/Documents/nci_vb_git/felber_covid_vaccine/code")
 
@@ -52,18 +53,24 @@ for(i in 1:nrow(df.ret)){
   }
 }
 
-# Naive Diff Metadata
+#make diff diff annotation
+diff_metadata <- read.csv("../results/naive_diff_metadata.csv", header = TRUE)
 col.nam <- colnames(df.ret)[colnames(df.ret) != "Gene"]
 patient_id <- apply(array(col.nam),1,function(z) unlist(str_split(z,"_"))[1]) #  unlist(str_split(col.nam,"_"))[1]
-contrast <- apply(array(col.nam),1,function(z) unlist(str_split(z,"_"))[2])
-df.metadata <- data.frame(sample_id=col.nam, patient_id = patient_id, contrast = gsub("-","_",contrast))
-df.all <- merge(df.orig,df.ret,by="row.names")
+contrast <- rep("vac2_vac1",length(patient_id)) #apply(array(col.nam),1,function(z) unlist(str_split(z,"_"))[2])
+#t.level <- apply(array(contrast),1,function(z) unlist(str_split(z,"_"))[1]) #unlist(str_split(contrast,"-"))[1]
+#r.level <- apply(array(contrast),1,function(z) unlist(str_split(z,"_"))[2]) #unlist(str_split(contrast,"-"))[2]
 
-#Fix metadata
+diff_diff_metadata <- data.frame(sample_id=col.nam, patient_id = patient_id, contrast = gsub("-","_",contrast))
+complex_metadata <- rbind(diff_metadata,diff_diff_metadata)
+
 metadata <- read.csv("../data/metadata.csv", header = TRUE)
 metadata <- metadata %>% select(-sample_id,-timepoint) %>% distinct()
-df.metadata <- merge(df.metadata,metadata, by="patient_id")
+naive_plot_metadata <- merge(complex_metadata,metadata, by="patient_id")
+
+naive_plot_counts <- merge(df.orig,df.ret,by="row.names")
+colnames(naive_plot_counts)[1] <- "Gene"
 
 write.csv(df.all, "../results/naive_plot_counts.csv", row.names = FALSE, quote = FALSE)
-write.csv(df.metadata, "../results/naive_plot_metadata.csv", row.names = FALSE, quote = FALSE)
+write.csv(naive_plot_metadata, "../results/naive_plot_metadata.csv", row.names = FALSE, quote = FALSE)
 

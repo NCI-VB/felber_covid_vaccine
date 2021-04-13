@@ -35,7 +35,7 @@ doheatmap <- function(dat, clus, clus2, ht, rn, cn, col,scale_range) {
   treeheight <- 25
   
   hm.parameters <- list(
-    tmean.scale, 
+    dat, 
     color=col.pal,
     legend_breaks=legbreaks,
     cellwidth=if(0 > 0){ 14 }else{ NA }, 
@@ -65,10 +65,11 @@ doheatmap <- function(dat, clus, clus2, ht, rn, cn, col,scale_range) {
   
   # print('calculated mat')
   
-  do.call("pheatmap", c(hm.parameters))
+  p <- do.call("pheatmap", c(hm.parameters))
+  return(p)
 }
 
-df <- read.csv("../results/naive_plot_counts.csv", header = TRUE)
+df <- read.csv("../results/naive_plot_counts.csv", header = TRUE, check.names = FALSE)
 
 samples_to_include = c("V002_d2-d1","V002_d22-d1","V002_d8-d1","V004_d22-d1","V004_d8-d1","V004_d2-d1","V005_d22-d1","V005_d8-d1","V005_d2-d1","V006_d22-d1","V006_d8-d1","V006_d2-d1","V007_d8-d1","V007_d2-d1","V007_d22-d1","V008_d8-d1","V008_d2-d1","V008_d22-d1","V009_d22-d1","V009_d8-d1","V009_d2-d1","V010_d22-d1","V010_d8-d1","V010_d2-d1","V011_d8-d1","V011_d22-d1","V011_d2-d1","V013_d22-d1","V013_d2-d1","V013_d8-d1","V015_d22-d1","V015_d2-d1","V015_d8-d1","V016_d22-d1","V016_d8-d1","V016_d2-d1","V017_d8-d1","V017_d22-d1","V017_d2-d1","V019_d22-d1","V019_d2-d1","V019_d8-d1","V020_d2-d1","V020_d8-d1","V020_d22-d1","V021_d8-d1","V021_d22-d1","V021_d2-d1","V022_d8-d1","V022_d22-d1","V022_d2-d1","V024_d8-d1","V024_d22-d1","V024_d2-d1","V025_d8-d1","V025_d22-d1","V025_d2-d1","V026_d8-d1","V026_d22-d1","V026_d2-d1","V027_d8-d1","V027_d22-d1","V027_d2-d1","V028_d8-d1","V028_d22-d1","V028_d2-d1","V029_d2-d1","V029_d8-d1","V029_d22-d1","V030_d8-d1","V030_d22-d1","V030_d2-d1","V031_d22-d1","V031_d8-d1","V031_d2-d1","V033_d22-d1","V033_d8-d1","V033_d2-d1","V034_d8-d1","V034_d22-d1","V034_d2-d1","V036_d2-d1","V036_d8-d1","V036_d22-d1","V037_d22-d1","V037_d8-d1","V037_d2-d1","V039_d22-d1","V039_d8-d1","V039_d2-d1","V041_d22-d1","V041_d2-d1","V041_d8-d1","V043_d2-d1","V043_d8-d1","V043_d22-d1","V045_d22-d1","V045_d2-d1","V045_d8-d1","V048_d22-d1","V048_d2-d1","V048_d8-d1","V049_d22-d1","V049_d2-d1","V049_d8-d1","V050_d2-d1","V050_d8-d1","V050_d22-d1","V051_d8-d1","V051_d22-d1","V051_d2-d1","V054_d22-d1","V054_d2-d1","V054_d8-d1","V056_d2-d1","V056_d22-d1","V056_d8-d1","V057_d2-d1","V057_d22-d1","V057_d8-d1","V058_d2-d1","V058_d8-d1","V058_d22-d1","V061_d22-d1","V061_d2-d1","V061_d8-d1","V063_d22-d1","V063_d8-d1","V063_d2-d1","V064_d22-d1","V064_d8-d1","V064_d2-d1","V066_d8-d1","V066_d2-d1","V066_d22-d1","V067_d8-d1","V067_d22-d1","V067_d2-d1","V068_d22-d1","V068_d8-d1","V068_d2-d1","V070_d22-d1","V070_d8-d1","V070_d2-d1","V071_d8-d1","V071_d22-d1","V071_d2-d1","V073_d22-d1","V073_d2-d1","V073_d8-d1","V077_d22-d1","V077_d2-d1","V077_d8-d1","V140_d22-d1","V140_d8-d1","V140_d2-d1","V141_d8-d1","V141_d22-d1","V141_d2-d1","V142_d22-d1","V142_d2-d1","V142_d8-d1","V143_d2-d1","V143_d8-d1","V143_d22-d1","V145_d8-d1","V145_d22-d1","V145_d2-d1","V147_d8-d1","V147_d22-d1","V147_d2-d1","V148_d8-d1","V148_d22-d1","V148_d2-d1")
 
@@ -158,7 +159,5 @@ png(
   type="cairo")
 
 p = doheatmap(dat=df.mat, clus=FALSE, clus2=TRUE, ht=50, rn=TRUE, cn=FALSE, col="Blue-Red 3",scale_range=1)
-
-print(p)
 
 dev.off()
