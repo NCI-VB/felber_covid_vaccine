@@ -2,6 +2,30 @@ suppressMessages(library(corrplot)) # 0.84
 suppressMessages(library(tidyverse)) # 1.3.0
 suppressMessages(library(colorspace)) # 1.4.1
 
+# From qdap v2.4.3
+# https://cran.r-project.org/web/packages/qdap/index.html
+.multigsub <-
+  function (pattern, replacement, text.var, leadspace = FALSE, 
+            trailspace = FALSE, fixed = TRUE, trim = TRUE, order.pattern = fixed, 
+            ...) {
+    
+    if (leadspace | trailspace) replacement <- spaste(replacement, trailing = trailspace, leading = leadspace)
+    
+    if (fixed && order.pattern) {
+      ord <- rev(order(nchar(pattern)))
+      pattern <- pattern[ord]
+      if (length(replacement) != 1) replacement <- replacement[ord]
+    }
+    if (length(replacement) == 1) replacement <- rep(replacement, length(pattern))
+    
+    for (i in seq_along(pattern)){
+      text.var <- gsub(pattern[i], replacement[i], text.var, fixed = fixed, ...)
+    }
+    
+    if (trim) text.var <- gsub("\\s+", " ", gsub("^\\s+|\\s+$", "", text.var, perl=TRUE), perl=TRUE)
+    text.var
+}
+
 df <- read.csv("../results/naive_plot_counts.csv", header = TRUE, check.names = FALSE)
 
 contrast <- "_d2-d1$"
@@ -61,26 +85,5 @@ p
 
 dev.off()
 
-# From qdap v2.4.3
-# https://cran.r-project.org/web/packages/qdap/index.html
-.multigsub <-
-  function (pattern, replacement, text.var, leadspace = FALSE, 
-            trailspace = FALSE, fixed = TRUE, trim = TRUE, order.pattern = fixed, 
-            ...) {
-    
-    if (leadspace | trailspace) replacement <- spaste(replacement, trailing = trailspace, leading = leadspace)
-    
-    if (fixed && order.pattern) {
-      ord <- rev(order(nchar(pattern)))
-      pattern <- pattern[ord]
-      if (length(replacement) != 1) replacement <- replacement[ord]
-    }
-    if (length(replacement) == 1) replacement <- rep(replacement, length(pattern))
-    
-    for (i in seq_along(pattern)){
-      text.var <- gsub(pattern[i], replacement[i], text.var, fixed = fixed, ...)
-    }
-    
-    if (trim) text.var <- gsub("\\s+", " ", gsub("^\\s+|\\s+$", "", text.var, perl=TRUE), perl=TRUE)
-    text.var
-  }
+df <- df %>% rownames_to_column("patient_id")
+write.csv(df, "../results/corrplot_d2vd1.csv", row.names = FALSE, quote = FALSE)
