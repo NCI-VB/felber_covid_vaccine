@@ -1,5 +1,6 @@
 
 suppressMessages(library(tidyverse)) #1.3.0
+suppressMessages(library(stringr)) #1.4.0
 
 setwd("/Users/angelmg/Documents/nci_vb_git/felber_covid_vaccine/code")
 

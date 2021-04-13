@@ -1,5 +1,3 @@
-require(pheatmap)
-require(dendsort)
 
 suppressMessages(library(colorspace))
 suppressMessages(library(pheatmap))
@@ -27,7 +25,7 @@ doheatmap <- function(dat, clus, clus2, ht, rn, cn, col,scale_range) {
   
   breaks = seq(-1*scale_range, scale_range, length=100)
   legbreaks = seq(-1*scale_range, scale_range, length=5)
-    
+  
   breaks = sapply(breaks, signif, 4)
   legbreaks = sapply(legbreaks, signif, 4)
   
@@ -70,21 +68,20 @@ doheatmap <- function(dat, clus, clus2, ht, rn, cn, col,scale_range) {
 
 df <- read.csv("../results/naive_plot_counts.csv", header = TRUE, check.names = FALSE)
 
-samples_to_include = c("V002_d2-d1","V002_d22-d1","V002_d8-d1","V004_d22-d1","V004_d8-d1","V004_d2-d1","V005_d22-d1","V005_d8-d1","V005_d2-d1","V006_d22-d1","V006_d8-d1","V006_d2-d1","V007_d8-d1","V007_d2-d1","V007_d22-d1","V008_d8-d1","V008_d2-d1","V008_d22-d1","V009_d22-d1","V009_d8-d1","V009_d2-d1","V010_d22-d1","V010_d8-d1","V010_d2-d1","V011_d8-d1","V011_d22-d1","V011_d2-d1","V013_d22-d1","V013_d2-d1","V013_d8-d1","V015_d22-d1","V015_d2-d1","V015_d8-d1","V016_d22-d1","V016_d8-d1","V016_d2-d1","V017_d8-d1","V017_d22-d1","V017_d2-d1","V019_d22-d1","V019_d2-d1","V019_d8-d1","V020_d2-d1","V020_d8-d1","V020_d22-d1","V021_d8-d1","V021_d22-d1","V021_d2-d1","V022_d8-d1","V022_d22-d1","V022_d2-d1","V024_d8-d1","V024_d22-d1","V024_d2-d1","V025_d8-d1","V025_d22-d1","V025_d2-d1","V026_d8-d1","V026_d22-d1","V026_d2-d1","V027_d8-d1","V027_d22-d1","V027_d2-d1","V028_d8-d1","V028_d22-d1","V028_d2-d1","V029_d2-d1","V029_d8-d1","V029_d22-d1","V030_d8-d1","V030_d22-d1","V030_d2-d1","V031_d22-d1","V031_d8-d1","V031_d2-d1","V033_d22-d1","V033_d8-d1","V033_d2-d1","V034_d8-d1","V034_d22-d1","V034_d2-d1","V036_d2-d1","V036_d8-d1","V036_d22-d1","V037_d22-d1","V037_d8-d1","V037_d2-d1","V039_d22-d1","V039_d8-d1","V039_d2-d1","V041_d22-d1","V041_d2-d1","V041_d8-d1","V043_d2-d1","V043_d8-d1","V043_d22-d1","V045_d22-d1","V045_d2-d1","V045_d8-d1","V048_d22-d1","V048_d2-d1","V048_d8-d1","V049_d22-d1","V049_d2-d1","V049_d8-d1","V050_d2-d1","V050_d8-d1","V050_d22-d1","V051_d8-d1","V051_d22-d1","V051_d2-d1","V054_d22-d1","V054_d2-d1","V054_d8-d1","V056_d2-d1","V056_d22-d1","V056_d8-d1","V057_d2-d1","V057_d22-d1","V057_d8-d1","V058_d2-d1","V058_d8-d1","V058_d22-d1","V061_d22-d1","V061_d2-d1","V061_d8-d1","V063_d22-d1","V063_d8-d1","V063_d2-d1","V064_d22-d1","V064_d8-d1","V064_d2-d1","V066_d8-d1","V066_d2-d1","V066_d22-d1","V067_d8-d1","V067_d22-d1","V067_d2-d1","V068_d22-d1","V068_d8-d1","V068_d2-d1","V070_d22-d1","V070_d8-d1","V070_d2-d1","V071_d8-d1","V071_d22-d1","V071_d2-d1","V073_d22-d1","V073_d2-d1","V073_d8-d1","V077_d22-d1","V077_d2-d1","V077_d8-d1","V140_d22-d1","V140_d8-d1","V140_d2-d1","V141_d8-d1","V141_d22-d1","V141_d2-d1","V142_d22-d1","V142_d2-d1","V142_d8-d1","V143_d2-d1","V143_d8-d1","V143_d22-d1","V145_d8-d1","V145_d22-d1","V145_d2-d1","V147_d8-d1","V147_d22-d1","V147_d2-d1","V148_d8-d1","V148_d22-d1","V148_d2-d1")
-
+samples_to_include = c("V002_d2-d1","V004_d2-d1","V005_d2-d1","V006_d2-d1","V007_d2-d1","V008_d2-d1","V009_d2-d1","V010_d2-d1","V011_d2-d1","V013_d2-d1","V015_d2-d1","V016_d2-d1","V017_d2-d1","V019_d2-d1","V020_d2-d1","V021_d2-d1","V022_d2-d1","V024_d2-d1","V025_d2-d1","V026_d2-d1","V027_d2-d1","V028_d2-d1","V029_d2-d1","V030_d2-d1","V031_d2-d1","V033_d2-d1","V034_d2-d1","V036_d2-d1","V037_d2-d1","V039_d2-d1","V041_d2-d1","V043_d2-d1","V045_d2-d1","V048_d2-d1","V049_d2-d1","V050_d2-d1","V051_d2-d1","V054_d2-d1","V056_d2-d1","V057_d2-d1","V058_d2-d1","V061_d2-d1","V063_d2-d1","V064_d2-d1","V066_d2-d1","V067_d2-d1","V068_d2-d1","V070_d2-d1","V071_d2-d1","V073_d2-d1","V077_d2-d1","V140_d2-d1","V141_d2-d1","V142_d2-d1","V143_d2-d1","V145_d2-d1","V147_d2-d1","V002_d23-d22","V004_d23-d22","V005_d23-d22","V006_d23-d22","V007_d23-d22","V008_d23-d22","V009_d23-d22","V011_d23-d22","V013_d23-d22","V015_d23-d22","V016_d23-d22","V017_d23-d22","V019_d23-d22","V020_d23-d22","V021_d23-d22","V022_d23-d22","V024_d23-d22","V025_d23-d22","V026_d23-d22","V027_d23-d22","V028_d23-d22","V029_d23-d22","V030_d23-d22","V031_d23-d22","V033_d23-d22","V034_d23-d22","V036_d23-d22","V037_d23-d22","V039_d23-d22","V041_d23-d22","V043_d23-d22","V045_d23-d22","V048_d23-d22","V049_d23-d22","V050_d23-d22","V051_d23-d22","V054_d23-d22","V056_d23-d22","V057_d23-d22","V058_d23-d22","V061_d23-d22","V063_d23-d22","V064_d23-d22","V066_d23-d22","V067_d23-d22","V068_d23-d22","V070_d23-d22","V071_d23-d22","V073_d23-d22","V077_d23-d22","V140_d23-d22","V141_d23-d22","V142_d23-d22","V143_d23-d22","V145_d23-d22","V147_d23-d22","V148_d23-d22","V002_d23-d22-d2-d1","V004_d23-d22-d2-d1","V005_d23-d22-d2-d1","V006_d23-d22-d2-d1","V007_d23-d22-d2-d1","V008_d23-d22-d2-d1","V009_d23-d22-d2-d1","V010_d23-d22-d2-d1","V011_d23-d22-d2-d1","V013_d23-d22-d2-d1","V015_d23-d22-d2-d1","V016_d23-d22-d2-d1","V017_d23-d22-d2-d1","V019_d23-d22-d2-d1","V020_d23-d22-d2-d1","V021_d23-d22-d2-d1","V022_d23-d22-d2-d1","V024_d23-d22-d2-d1","V025_d23-d22-d2-d1","V026_d23-d22-d2-d1","V027_d23-d22-d2-d1","V028_d23-d22-d2-d1","V029_d23-d22-d2-d1","V030_d23-d22-d2-d1","V031_d23-d22-d2-d1","V033_d23-d22-d2-d1","V034_d23-d22-d2-d1","V036_d23-d22-d2-d1","V037_d23-d22-d2-d1","V039_d23-d22-d2-d1","V041_d23-d22-d2-d1","V043_d23-d22-d2-d1","V045_d23-d22-d2-d1","V048_d23-d22-d2-d1","V049_d23-d22-d2-d1","V050_d23-d22-d2-d1","V051_d23-d22-d2-d1","V054_d23-d22-d2-d1","V056_d23-d22-d2-d1","V057_d23-d22-d2-d1","V058_d23-d22-d2-d1","V061_d23-d22-d2-d1","V063_d23-d22-d2-d1","V064_d23-d22-d2-d1")
 
 df.orig <- df %>% dplyr::select(one_of(c("Gene",samples_to_include)))
 df.mat = df.orig[ , (colnames(df.orig) != "Gene" )] %>% as.data.frame
 row.names(df.mat) <- df.orig$Gene
 df.mat <- as.data.frame(df.mat)
 
-
 annot <- read.csv("../results/naive_plot_metadata.csv", header = TRUE)
 annot %>% dplyr::filter(sample_id %in% samples_to_include) -> annot
 annot$contrast <- factor(annot$contrast)
+print(annot$contrast)
 groups = c("contrast")
-relevel_factors <- TRUE
-factor_relevel <- c("contrast:d2_d1,d8_d1,d22_d1,d23_d22")
+relevel_factors <- FALSE
+factor_relevel <- c("contrast:d2_d1,d23_d22,vac2_vac1")
 if(relevel_factors){
   for(f in factor_relevel){
     variable <- unlist(str_split(f,":"))[1]
@@ -121,6 +118,8 @@ if(sample_color_palette || set_color_seed){
   set.seed(seed)
   colors <- sample(colors)
 }
+#override colors
+colors <- c("#66C2A5","#984EA3","#B3B3B3")
 #cat("Annotation color palette:\n")
 #print(colors)
 b=1
@@ -147,10 +146,11 @@ imageWidth = 3000
 imageHeight = 1500
 dpi = 300
 
-p = doheatmap(dat=df.mat, clus=FALSE, clus2=TRUE, ht=50, rn=TRUE, cn=FALSE, col="Blue-Red 3",scale_range=1)
+
+p = doheatmap(dat=df.mat, clus=FALSE, clus2=TRUE, ht=50, rn=TRUE, cn=FALSE, col="Blue-Red 3",scale_range=2.5)
 
 png(
-  filename="../plots/naive_heatmap_vaccination_I.png",
+  filename="../plots/naive_heatmap_vaccination_II.png",
   width=imageWidth,
   height=imageHeight,
   units="px",
@@ -160,4 +160,5 @@ png(
   type="cairo")
 
 p
+
 dev.off()

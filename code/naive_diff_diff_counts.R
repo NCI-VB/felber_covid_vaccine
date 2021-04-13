@@ -71,6 +71,6 @@ naive_plot_metadata <- merge(complex_metadata,metadata, by="patient_id")
 naive_plot_counts <- merge(df.orig,df.ret,by="row.names")
 colnames(naive_plot_counts)[1] <- "Gene"
 
-write.csv(df.all, "../results/naive_plot_counts.csv", row.names = FALSE, quote = FALSE)
+write.csv(naive_plot_counts, "../results/naive_plot_counts.csv", row.names = FALSE, quote = FALSE)
 write.csv(naive_plot_metadata, "../results/naive_plot_metadata.csv", row.names = FALSE, quote = FALSE)
 
