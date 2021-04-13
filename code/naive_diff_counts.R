@@ -1,8 +1,14 @@
 
 suppressMessages(library(tidyverse)) #1.3.0
 
+setwd("/Users/angelmg/Documents/nci_vb_git/felber_covid_vaccine/code")
+
 df <- read.csv("../results/naive_dataset.csv", header = TRUE)
+genes_of_interest <- read.csv("../data/genes_of_interest.csv", header = TRUE)
 annot <- read.csv("../data/metadata.csv", header = TRUE)
+
+#Filter on genes
+df <- df %>% filter(Gene %in% genes_of_interest$Gene)
 
 annot <- annot %>% filter(sample_id %in% colnames(df))
 
