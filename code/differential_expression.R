@@ -4,6 +4,8 @@ suppressMessages(library(tidyverse)) #1.3.0
 suppressMessages(library(edgeR)) #3.24.3
 suppressMessages(library(stringr)) #1.4.0
 
+setwd("/Users/angelmg/Documents/nci_vb_git/felber_covid_vaccine/code")
+
 voom_msd <- function (counts, design = NULL, ...) 
 {
   out <- list()
