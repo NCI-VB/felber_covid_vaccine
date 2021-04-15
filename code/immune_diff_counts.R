@@ -1,6 +1,8 @@
 
 suppressMessages(library("tidyverse"))
 
+setwd("~/Documents/nci_vb_git/felber_covid_vaccine/code")
+
 df <- read.csv("../results/immune_dataset.csv", header = TRUE,  check.names = FALSE)
 annot <- read.csv("../data/metadata.csv", header = TRUE)
 
@@ -67,7 +69,7 @@ for(n in seq_along(contrasts)){
   }
 }
 
-col.nam <- colnames(df)[colnames(df) != "Gene"]
+col.nam <- colnames(immune_diff_counts)[colnames(immune_diff_counts) != "Gene"]
 patient_id <- apply(array(col.nam),1,function(z) unlist(str_split(z,"_"))[1])
 contrast <- apply(array(col.nam),1,function(z) unlist(str_split(z,"_"))[2])
 immune_diff_metadata <- data.frame(sample_id=col.nam, patient_id = patient_id, contrast = gsub("-","_",contrast))

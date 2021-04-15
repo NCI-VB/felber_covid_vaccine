@@ -1,6 +1,8 @@
 
 suppressMessages(library(tidyverse))
 
+setwd("~/Documents/nci_vb_git/felber_covid_vaccine/code")
+
 immune_diff_counts <- read.csv("../results/immune_diff_counts.csv", header = TRUE, check.names = FALSE)
 immune_diff_metadata <- read.csv("../results/immune_diff_metadata.csv", header = TRUE, check.names = FALSE)
 
@@ -52,4 +54,8 @@ for(i in 1:nrow(immune_complex_diff_counts)){
 }
 
 immune_complex_diff_counts <- immune_complex_diff_counts %>% rownames_to_column("Gene")
-write.csv(immune_complex_diff_counts, "../results/immune_complex_diff_counts.csv", row.names = FALSE, quote = FALSE)
+immune_diff_counts <- immune_diff_counts %>% rownames_to_column("Gene")
+
+merged_diff_immune <- merge(immune_diff_counts,immune_complex_diff_counts,by="Gene")
+
+write.csv(merged_diff_immune, "../results/merged_diff_immune.csv", row.names = FALSE, quote = FALSE)
