@@ -5,6 +5,7 @@ setwd("~/Documents/nci_vb_git/felber_covid_vaccine/code")
 
 immune_diff_counts <- read.csv("../results/immune_diff_counts.csv", header = TRUE, check.names = FALSE)
 immune_diff_metadata <- read.csv("../results/immune_diff_metadata.csv", header = TRUE, check.names = FALSE)
+metadata <- read.csv("../data/metadata.csv", header = TRUE, check.names = FALSE)
 
 row.names(immune_diff_counts) <- immune_diff_counts$Gene
 immune_diff_counts$Gene <- NULL
@@ -55,7 +56,19 @@ for(i in 1:nrow(immune_complex_diff_counts)){
 
 immune_complex_diff_counts <- immune_complex_diff_counts %>% rownames_to_column("Gene")
 immune_diff_counts <- immune_diff_counts %>% rownames_to_column("Gene")
-
 merged_diff_immune <- merge(immune_diff_counts,immune_complex_diff_counts,by="Gene")
 
-write.csv(merged_diff_immune, "../results/merged_diff_immune.csv", row.names = FALSE, quote = FALSE)
+#Make complex metadata
+col.nam <- colnames(immune_complex_diff_counts)[colnames(immune_complex_diff_counts) != "Gene"]
+patient_id <- apply(array(col.nam),1,function(z) unlist(str_split(z,"_"))[1]) #  unlist(str_split(col.nam,"_"))[1]
+contrast <- rep("vac2_vac1",length(patient_id))
+complex_diff_immune_metadata <- data.frame(sample_id=col.nam, patient_id = patient_id, contrast = gsub("-","_",contrast))
+combined_metadata <- rbind(immune_diff_metadata,complex_diff_immune_metadata)
+
+merged.df <- metadata %>% select(-sample_id,-timepoint) %>% distinct()
+print(head(merged.df))
+merged_metadata <- merge(combined_metadata,merged.df, by="patient_id")
+merged_metadata <- merged_metadata %>% select(sample_id, everything()) %>% distinct() 
+
+write.csv(merged_diff_immune, "../results/immune_plot_counts.csv", row.names = FALSE, quote = FALSE)
+write.csv(merged_metadata, "../results/immune_plot_metadata.csv", row.names = FALSE, quote = FALSE)
